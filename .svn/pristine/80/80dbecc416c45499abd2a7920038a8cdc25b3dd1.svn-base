@@ -1,0 +1,151 @@
+/*
+ * #%L
+ * IoT xfiles
+ * %%
+ * Copyright (C) 2016 - 2018 SYST Research Group, Universidad Politecnica de Madrid
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+package es.upm.syst.IoT.components.routers;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.stream.JsonParsingException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MQTTRouter implements Router {
+
+	private MqttClient client;
+	static Logger logger = LogManager.getLogger();
+	private static Properties properties;
+	private static final String file = "MQTTBroker.properties";
+
+	public MQTTRouter() throws IOException, MqttException {
+		properties = new Properties();
+		InputStream iStream = MQTTRouter.class.getClassLoader().getResourceAsStream(file);
+		properties.load(iStream);
+		if (connect("00000000000000000000")) {
+			logger.info("MQTT Client connected to the broker succesfully at " + properties.getProperty("url"));
+			client.disconnect();
+		}
+	}
+
+	@Override
+	public void close() throws Exception {
+		client.disconnect();
+	}
+
+	@Override
+	public void send(Object data) {
+		if(isJSONValid(data.toString())) {
+			try{
+				JSONObject message;
+				if(data.toString().startsWith("[")){
+					JSONArray jsonArr = new JSONArray (data.toString());
+					for (int i = 0; i < jsonArr.length(); i++)
+			        {
+			           message = jsonArr.getJSONObject(i);	           
+			           sendToThingspeak(message);
+			        }
+				}
+				else if(data.toString().startsWith("{")){
+					message = new JSONObject(data.toString());
+					sendToThingspeak(message);
+				}
+			} catch (Throwable e) {
+			    logger.error("Uncaught exception", e); // prints the stack trace.
+			    //System.exit(0);
+			}
+		} else logger.info("Bad format message: "+data.toString());		
+	}
+	
+	// BORRAR SI TODO FUNCIONA CORRECTAMENTE
+	/*private static JsonObject jsonFromString(String jsonObjectStr) {
+		JsonReader jsonReader = Json.createReader(new StringReader(jsonObjectStr));		
+		JsonObject object = jsonReader.readObject();
+		jsonReader.close();
+		return object;
+	}*/
+
+	private boolean connect(String user) {
+		MqttConnectOptions conOpt = new MqttConnectOptions();
+		conOpt.setCleanSession(false);
+		conOpt.setUserName(user);
+		try {
+			client = new MqttClient(properties.getProperty("url"), // URI
+					properties.getProperty("clientID"), // ClientId
+					new MemoryPersistence());// Persistence
+			client.connect(conOpt);
+		} catch (MqttException e) {
+			logger.error("Error connecting to MQTT Broker with user " + user);
+		}
+		return client.isConnected();
+	}
+
+	private void sendToThingspeak(JSONObject message){
+		try{
+			if (connect(message.getString("token"))) {
+				// client.publish("v1/devices/me/attributes",
+				// "{\"firmware_version\":\"9.9.9\",
+				// \"serial_number\":\"Mote4\"}".getBytes("UTF-8"),2,false);
+				client.publish("v1/devices/me/telemetry",
+						("{\"Temperature\":" + message.getString("Temperature") + ", \"Humidity\":"
+								+ message.getString("Humidity") + ", \"Luminosity\":"
+								+ message.getString("Luminosity") + ", \"Obstacle\": "
+								+ String.valueOf(message.getBoolean("Obstacle")) + "}").getBytes("UTF-8"),
+						2, false);
+			} else
+				throw new MqttException(0);
+
+		} catch (UnsupportedEncodingException | MqttException e) {
+			logger.error("Error while sending message to the broker");
+		} catch (JsonParsingException e) {
+			logger.error("Error while parsing the message from the mote");
+		}
+	}
+	
+	private boolean isJSONValid(String test) {
+	    try {
+	        new JSONObject(test);
+	    } catch (JSONException ex) {
+	        // edited, to include @Arthur's comment
+	        // e.g. in case JSONArray is valid as well...
+	        try {
+	            new JSONArray(test);
+	        } catch (JSONException ex1) {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+}

@@ -1,0 +1,6 @@
+#listener=MockArduinoHector
+listener= RaspiUART
+#filter=NoFilter
+filter=JSONFilter
+translator=NoTranslator
+router=MQTTRouter

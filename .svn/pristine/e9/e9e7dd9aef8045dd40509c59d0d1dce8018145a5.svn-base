@@ -1,0 +1,165 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "MotaMeasure",
+    "type": "object",
+    "required": [
+        "MotaMeasure"
+    ],
+    "properties": {
+        "MotaMeasure": {
+            "type": "string",
+            "$ref": "#/datos"
+        }
+    },
+    "datos": {
+        "description": "Mota measures",
+        "type": "object",
+        "required": [
+            "timestamp",
+            "MotaId",
+            "measures"
+        ],
+        "properties": {
+            "timestamp": {
+                "type": "object",
+                "required": [
+                    "$date"
+                ],
+                "properties": {
+                    "$date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "MotaId": {
+                "type": "string"
+            },
+            "geometry": {
+                "type": "object",
+                "required": [
+                    "coordinates",
+                    "type"
+                ],
+                "properties": {
+                    "coordinates": {
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "number",
+                                "maximum": 180,
+                                "minimum": -180
+                            },
+                            {
+                                "type": "number",
+                                "maximum": 90,
+                                "minimum": -90
+                            }
+                        ],
+                        "minItems": 2,
+                        "maxItems": 2
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "Point"
+                        ]
+                    }
+                },
+                "additionalProperties": false
+            },
+            "measures": {
+                "type": "object",
+                "required": [
+                    "humidity",
+                    "temperature",
+                    "luminosity"
+                ],
+                "properties": {
+                    "humidity": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "unit"
+                        ],
+                        "properties": {
+                            "value": {
+                                "type": "number"
+                            },
+                            "unit": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "temperature": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "unit"
+                        ],
+                        "properties": {
+                            "value": {
+                                "type": "number"
+                            },
+                            "unit": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "luminosity": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "unit"
+                        ],
+                        "properties": {
+                            "value": {
+                                "type": "number"
+                            },
+                            "unit": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "CO2": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "unit"
+                        ],
+                        "properties": {
+                            "value": {
+                                "type": "number"
+                            },
+                            "unit": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "CO": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "unit"
+                        ],
+                        "properties": {
+                            "value": {
+                                "type": "number"
+                            },
+                            "unit": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    }
+}

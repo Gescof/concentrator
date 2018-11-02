@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log4j:configuration debug="true"  xmlns:log4j='http://jakarta.apache.org/log4j/'>
+	
+  <Appenders>
+  
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{MM-dd@HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    
+    <RollingFile name="RollingFile" fileName="logs/app.log" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
+       <PatternLayout pattern="%d{MM-dd@HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="250 MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="4"/>
+    </RollingFile>
+    
+  </Appenders>
+  
+  <Loggers>
+  	<Logger name="es.upm.syst.IoT.concentrator.Concentrator" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    
+    <Logger name="es.upm.syst.IoT.components" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    
+    <Logger name="es.upm.syst.IoT.components.routers" level="debug" additivity="false">
+    	<AppenderRef ref="Console"/>
+    	<AppenderRef ref="RollingFile"/>
+    </Logger>
+  
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+</log4j:configuration>
+
