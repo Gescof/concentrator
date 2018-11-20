@@ -122,6 +122,13 @@ public class MotaMasterTranslator implements Translator<String, String> {
 			JsonObject motaMeasureJSON = Json.createObjectBuilder().add("MotaMeasure", generateMotaMeasure(data)).build();
 			String instanciaOntologia=motaMeasureJSON.toString();
 			return instanciaOntologia;
-		} 
+		}
+
+
+	@Override
+	public String getMnsg() {
+		// TODO Auto-generated method stub
+		return null;
+	} 
 
 }

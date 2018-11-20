@@ -21,6 +21,10 @@
  */
 package es.upm.syst.IoT.concentrator.simulators;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,9 +40,38 @@ import es.upm.syst.IoT.components.routers.Router;
 import es.upm.syst.IoT.components.translators.ConcentradorBibliotecaTranslator;
 import es.upm.syst.IoT.components.translators.Translator;
 
+import com.google.gson.Gson; 
+
+
+
 public class Concentrator {
 	
 	private static final Logger logger = LogManager.getLogger();
+	
+	    private static void escribirJson(String dato) throws java.io.IOException {
+	    	 FileWriter fichero = null;
+	         PrintWriter pw = null;
+	         try
+	         {
+	             fichero = new FileWriter("E:\\Users\\Guillermo\\Documents\\concentrator\\generated_json\\pruebas.json");
+	             pw = new PrintWriter(fichero);
+	             pw.println(dato);
+
+	         } catch (Exception e) {
+	             e.printStackTrace();
+	         } finally {
+	            try {
+	            // Nuevamente aprovechamos el finally para 
+	            // asegurarnos que se cierra el fichero.
+	            if (null != fichero)
+	               fichero.close();
+	            } catch (Exception e2) {
+	               e2.printStackTrace();
+	            }
+	         }      
+	    }
+	 
+	
 	
 	public static void main (String...args){
 		
@@ -48,7 +81,10 @@ public class Concentrator {
 		//Translator translator = new MotaMasterTranslator();
 		Translator<String,String> translator = new ConcentradorBibliotecaTranslator();
 		
-		try (    //Listener listener = new es.upm.syst.IoT.components.listeners.MockMotaMasterListener(1000);
+		int cont =0;
+		
+		try (	
+				//Listener listener = new es.upm.syst.IoT.components.listeners.MockMotaMasterListener(1000);
 				Listener<String,String> listener = new es.upm.syst.IoT.components.listeners.MockConcentradorBiblioteca(1000);
 				//Listener<String,String> listener = new es.upm.syst.IoT.components.listeners.RaspberryPiUARTListenerHeaders(1000);
 				//Router<String> router = new ConsoleRouter();
@@ -56,7 +92,6 @@ public class Concentrator {
 				Monitor<String,String> monitor = new BasicMonitor<String,String>(listener, filter, translator, router);) {
 			
 			monitor.start();
-			
 			try {
 				Thread.sleep(20000);
 			} catch (InterruptedException e) {
@@ -73,8 +108,14 @@ public class Concentrator {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-	
-		
+			//System.out.println(translator.getMnsg().substring(4));
+			try {
+			escribirJson(translator.getMnsg().substring(4));
+			System.out.println("fichero creado");
+			}catch(IOException E) {
+				
+			}
 	}	
 	
+
 }

@@ -23,4 +23,7 @@ package es.upm.syst.IoT.components.translators;
 
 public interface Translator<I,O> {
 	O translate(I data);
+	
+	String getMnsg();
 }
+

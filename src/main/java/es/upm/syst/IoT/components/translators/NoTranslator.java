@@ -28,4 +28,10 @@ public class NoTranslator<I> implements Translator<I, I> {
 		return data;
 	}
 
+	@Override
+	public String getMnsg() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

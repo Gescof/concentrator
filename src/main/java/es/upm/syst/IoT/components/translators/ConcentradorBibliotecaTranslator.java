@@ -43,7 +43,7 @@ public class ConcentradorBibliotecaTranslator implements Translator<String, Stri
 	final private String MEASURE_MARKER = ";";
 	final private String MARKER = "\\|";
 	
-
+	private String mnsg;
 	
 	@Override
 	public String translate(String data) {
@@ -57,10 +57,15 @@ public class ConcentradorBibliotecaTranslator implements Translator<String, Stri
 			msg = formatMessage(msg);
 		}
 		else logger.error("Error during the translation process. Is the received data properly formatted?");
-		
+		//System.out.println(msg);
+		mnsg += msg+"\n";
 		return msg;
 	}
 	
+	
+	public String getMnsg() {
+		return mnsg;
+	}
 	//Example of entity in MotaMeasure  Ontology of Sofia2
 //	{"MotaMeasure":
 //	  { "timestamp":{"$date": "2014-01-30T17:14:00Z"},
@@ -129,5 +134,6 @@ public class ConcentradorBibliotecaTranslator implements Translator<String, Stri
 				.add("unit", unidad)
 				.build();
 	}
+
 
 }
