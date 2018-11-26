@@ -5,10 +5,9 @@ public class Measures {
 	Member humidity;
 	Member luminosity;
 	
-	
 	public Measures()
 	{
-		//NULL
+		//TODO--Default Constructor
 	}
 	
 	public Member getTemperature() {
@@ -17,19 +16,19 @@ public class Measures {
 	public void setTemperature(Member temperature) {
 		this.temperature = temperature;
 	}
+	
 	public Member getHumidity() {
 		return humidity;
 	}
 	public void setHumidity(Member humidity) {
 		this.humidity = humidity;
 	}
+	
 	public Member getLuminosity() {
 		return luminosity;
 	}
 	public void setLuminosity(Member luminosity) {
 		this.luminosity = luminosity;
 	}
-	
-	
 	
 }

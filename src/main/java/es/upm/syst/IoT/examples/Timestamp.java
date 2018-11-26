@@ -12,14 +12,13 @@ public class Timestamp {
 
 	public Timestamp()
 	{
-		//XD
+		//TODO--Default Constructor
 	}
 	
 	@JsonGetter("$date")
 	public Date getDate() {
 		return date;
 	}
-
 	@JsonSetter("$date")
 	public void setDate(Date date) {
 		this.date = date;

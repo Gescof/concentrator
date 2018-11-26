@@ -1,12 +1,12 @@
 package es.upm.syst.IoT.examples;
 
-public class Geometry {
+public class Geometry extends ResulType {
 	String type;
 	float[] coordinates;
 	
 	public Geometry()
 	{
-		//AQUI NO HAY NADA
+		//TODO--Default Constructor
 	}
 	
 	public String getType() {
@@ -15,6 +15,7 @@ public class Geometry {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
 	public float[] getCoordinates() {
 		return coordinates;
 	}
@@ -22,5 +23,13 @@ public class Geometry {
 		this.coordinates = coordinates;
 	}
 	
-			
+	public String toStringOM() {
+		String string = "";
+		
+		string += "type: Point";
+		string += "\n\t\tcoordinates: [" + this.coordinates[0] + ", " + this.coordinates[1] + "]";
+		
+		return string;
+	}
+	
 }

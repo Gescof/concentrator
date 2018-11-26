@@ -11,15 +11,9 @@ public class MotaMeasure {
 	
 	public MotaMeasure()
 	{
-		//AQUI NADA, CREO
+		//TODO--Default Constructor
 	}
 	
-	public Measures getMeasures() {
-		return measures;
-	}
-	public void setMeasures(Measures measures) {
-		this.measures = measures;
-	}
 	public Timestamp getTimestamp() {
 		return timestamp;
 	}
@@ -35,11 +29,19 @@ public class MotaMeasure {
 	public void setMotaId(String motaId) {
 		MotaId = motaId;
 	}
+	
 	public Geometry getGeometry() {
 		return geometry;
 	}
-
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
+	
+	public Measures getMeasures() {
+		return measures;
+	}
+	public void setMeasures(Measures measures) {
+		this.measures = measures;
+	}
+	
 }

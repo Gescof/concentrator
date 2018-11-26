@@ -8,18 +8,16 @@ public class MotaMeasureTraza {
 	
 	public MotaMeasureTraza()
 	{
-		//SD
+		//TODO--Default Constructor
 	}
 
 	@JsonGetter("MotaMeasure")
 	public MotaMeasure getMotaMeasure() {
 		return MotaMeasure;
 	}
-
 	@JsonSetter("MotaMeasure")
 	public void setMotaMeasure(MotaMeasure MotaMeasure) {
 		this.MotaMeasure = MotaMeasure;
 	}
-	
 	
 }
