@@ -16,7 +16,7 @@ public class ObservationCollection {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.id = "observation collection " + id;
 	}
 	
 	public Timestamp getPhenomenomTime() {

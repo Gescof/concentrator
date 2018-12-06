@@ -61,6 +61,16 @@ public class ExampleMain {
 		
 		System.out.println(imprimirEsto);
 	}
+	
+	private static String replacements(String jsonString)
+	{
+		jsonString = jsonString.replace("$date", "instant");
+		jsonString = jsonString.replace("members", "member");
+		jsonString = jsonString.replace("unit", "uom");
+		//jsonString = jsonString.replace("\"", "\\" + "\"");
+		
+		return jsonString;
+	}
 
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		String trazaPrueba = "{\"MotaMeasure\":{\"timestamp\":{\"$date\":\"2018-11-19T22:06:52.863Z\"},\"MotaId\":\"13\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[40.390575,-3.626924]},\"measures\":{\"temperature\":{\"value\":5.1,\"unit\":\"Cº\"},\"humidity\":{\"value\":73.3,\"unit\":\"RH\"},\"luminosity\":{\"value\":31.0,\"unit\":\"lx\"}}}}";
@@ -81,5 +91,9 @@ public class ExampleMain {
 		omTraza.omCollection.setPhenomenomTime(motaMeasure.MotaMeasure.getTimestamp());
 		omTraza.omCollection.setMembers(members);
 		imprimirOMCollection(omTraza);
+		
+		String jsonString = objectMapper.writeValueAsString(omTraza.omCollection);
+		jsonString = replacements(jsonString);
+		System.out.println(jsonString);
 	}
 }

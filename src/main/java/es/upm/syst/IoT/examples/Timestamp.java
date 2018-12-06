@@ -1,14 +1,12 @@
 package es.upm.syst.IoT.examples;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 
 public class Timestamp {
 
-	private Date date;
+	private String date;
 
 	public Timestamp()
 	{
@@ -16,11 +14,11 @@ public class Timestamp {
 	}
 	
 	@JsonGetter("$date")
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 	@JsonSetter("$date")
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	
